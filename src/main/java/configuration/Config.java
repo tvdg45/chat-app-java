@@ -32,7 +32,7 @@ public class Config {
     
     public static void call_database_information() throws IOException {
         
-        String url_for_get_request = "https://tds-webhook.herokuapp.com/tds-webhook-company-website";
+        String url_for_get_request = "https://tds-webhook.herokuapp.com/tds-webhook-chat-app";
         
         RestTemplate restTemplate = new RestTemplate();
 
@@ -122,7 +122,7 @@ public class Config {
         //Example: Directory not included - https://www.timothysdigitalsolutions.com or directory included - https://www.timothysdigitalsolutions.com/contact-me
         //String third_party_domain = "https://user-account-management-1.herokuapp.com";
         //String third_party_domain = "https://time-tracker-java.herokuapp.com";
-        String third_party_domain = "https://timothysdigitalsolutions.herokuapp.com";
+        String third_party_domain = "https://chat-app-java.herokuapp.com";
         
         output += third_party_domain;
         
