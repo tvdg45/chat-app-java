@@ -9,7 +9,7 @@ public class Main {
         Object[] sources = new Object[2];
         
         sources[0] = Directory_Hider.class;
-        sources[1] = apps.Web_Page.class;
+        sources[1] = apps.Admin_Change_User_Status.class;
 		
         SpringApplication.run(sources, args);
     }
