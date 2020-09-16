@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin(origins = "https://tdscloud-dev-ed--c.visualforce.com", maxAge = 3600)
 @RestController
 @EnableAutoConfiguration
-@RequestMapping("/admin-chat-interface")
+//@RequestMapping("/admin-chat-interface")
 public class Admin_Chat_Interface extends HttpServlet {
     
     /*@RequestMapping(method = RequestMethod.POST)
@@ -217,6 +217,7 @@ public class Admin_Chat_Interface extends HttpServlet {
     }
     
     @Override
+	@RequestMapping("/admin-chat-interface")
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         processRequest(request, response);
@@ -897,8 +898,8 @@ public class Admin_Chat_Interface extends HttpServlet {
         }
     }
 	
-    /*public static void main(String[] args) throws Exception, IOException {
+    public static void main(String[] args) throws Exception, IOException {
 		
         SpringApplication.run(Admin_Chat_Interface.class, args);
-    }*/
+    }
 }
