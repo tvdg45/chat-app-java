@@ -897,8 +897,8 @@ public class Admin_Chat_Interface extends HttpServlet {
         }
     }
 	
-    public static void main(String[] args) throws Exception, IOException {
+    /*public static void main(String[] args) throws Exception, IOException {
 		
         SpringApplication.run(Admin_Chat_Interface.class, args);
-    }
+    }*/
 }
