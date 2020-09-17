@@ -22,6 +22,8 @@ public class Admin_Chat_Interface {
     
     @RequestMapping(method = RequestMethod.POST)
     String home(
+			HttpServletRequest request,
+			HttpServletResponse response,
             @RequestParam(value = "admin_session", defaultValue = "") String admin_session
     ) {
         
