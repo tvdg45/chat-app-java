@@ -19,9 +19,9 @@ import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 
-@CrossOrigin(origins = "https://tdscloud-dev-ed--c.visualforce.com", maxAge = 3600)
-@RestController
-@EnableAutoConfiguration
+//@CrossOrigin(origins = "https://tdscloud-dev-ed--c.visualforce.com", maxAge = 3600)
+//@RestController
+//@EnableAutoConfiguration
 public class Admin_Chat_Interface extends HttpServlet {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -712,6 +712,6 @@ public class Admin_Chat_Interface extends HttpServlet {
 	
     public static void main(String[] args) throws Exception, IOException {
 		
-        //SpringApplication.run(Admin_Chat_Interface.class, args);
+        SpringApplication.run(Admin_Chat_Interface.class, args);
     }
 }
