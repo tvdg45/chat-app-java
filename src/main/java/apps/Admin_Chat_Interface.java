@@ -29,7 +29,7 @@ public class Admin_Chat_Interface extends HttpServlet {
     }
     
     @Override
-    @RequestMapping("/admin-chat-interface")
+    @RequestMapping("/admin-chat-interface", method = RequestMethod.POST)
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         processRequest(request, response);
