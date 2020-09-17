@@ -20,7 +20,7 @@ import org.springframework.stereotype.*;
 import org.springframework.web.bind.annotation.*;
 
 //@CrossOrigin(origins = "https://tdscloud-dev-ed--c.visualforce.com", maxAge = 3600)
-@RestController
+//@RestController
 //@EnableAutoConfiguration
 public class Admin_Chat_Interface extends HttpServlet {
     
@@ -29,6 +29,7 @@ public class Admin_Chat_Interface extends HttpServlet {
     }
     
     @Override
+	@RestController
     @RequestMapping("/admin-chat-interface")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
