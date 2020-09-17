@@ -29,7 +29,6 @@ public class Admin_Chat_Interface extends HttpServlet {
     }
     
     @Override
-	@RestController
     @RequestMapping("/admin-chat-interface")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
