@@ -43,11 +43,7 @@ public class Admin_Chat_Interface extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        processRequest(request, response);
-		
-		PrintWriter out = response.getWriter();
-		
-		out.println("tester");
+        //processRequest(request, response);
     }
     
     /**
