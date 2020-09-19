@@ -29,10 +29,9 @@ public class Admin_Chat_Interface {
     ) {
         
         Connection use_open_connection;
+		PrintWriter out = response.getWriter();
         
         try {
-            
-        PrintWriter out = response.getWriter();
         
         use_open_connection = Config.openConnection();
         
