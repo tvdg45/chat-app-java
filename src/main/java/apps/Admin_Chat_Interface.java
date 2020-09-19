@@ -703,7 +703,7 @@ public class Admin_Chat_Interface {
         } catch (IOException e) {
             
             return "";
-        } catch (ServletException e) {
+        } catch (Exception e) {
 		}
     }
 	
