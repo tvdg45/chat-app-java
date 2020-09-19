@@ -61,11 +61,12 @@ public class Admin_Chat_Interface extends HttpServlet {
     */
     
     @Override
-	@GetMapping(path = "/admin-chat-interface", headers = "content-type=text/*")
+	@GetMapping("/admin-chat-interface")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         processRequest(request, response);
 
+		response.setContentType("text/html");
         response.addHeader("Access-Control-Allow-Origin", "https://tdscloud-dev-ed--c.visualforce.com");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
