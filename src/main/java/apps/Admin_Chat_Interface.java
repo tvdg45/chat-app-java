@@ -3,7 +3,6 @@ package apps;
 
 import java.io.IOException;
 import java.io.PrintWriter;
-import java.util.Map;
 
 import java.sql.Connection;
 import configuration.Config;
@@ -16,7 +15,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.*;
 
-import org.springframework.web.servlet.View;
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
 import org.springframework.stereotype.*;
@@ -56,12 +54,12 @@ public class Admin_Chat_Interface extends HttpServlet {
     */
     
     @Override
-	@GetMapping("/admin-chat-interface")
+    @GetMapping("/admin-chat-interface")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         processRequest(request, response);
-
-		response.setContentType("text/html");
+        
+        response.setContentType("text/html");
         response.addHeader("Access-Control-Allow-Origin", "https://tdscloud-dev-ed--c.visualforce.com");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
@@ -71,7 +69,7 @@ public class Admin_Chat_Interface extends HttpServlet {
         
         Connection use_open_connection;
   
-        use_open_connection = configuration.Config.openConnection();
+        use_open_connection = Config.openConnection();
         
         String admin_session;
         String guest_full_name = "";
