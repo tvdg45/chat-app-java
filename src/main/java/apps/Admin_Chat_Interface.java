@@ -17,7 +17,13 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.*;
 
 import org.springframework.web.servlet.View;
+import org.springframework.boot.*;
+import org.springframework.boot.autoconfigure.*;
+import org.springframework.stereotype.*;
+import org.springframework.web.bind.annotation.*;
 
+@RestController
+@EnableAutoConfiguration
 public class Admin_Chat_Interface implements View {
     
     protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
