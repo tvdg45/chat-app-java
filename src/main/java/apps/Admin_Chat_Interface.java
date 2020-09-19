@@ -61,7 +61,7 @@ public class Admin_Chat_Interface extends HttpServlet {
     */
     
     @Override
-	@GetMapping("/admin-chat-interface", produces = "text/html")
+	@GetMapping(path = "/admin-chat-interface", produces = "text/html")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         processRequest(request, response);
