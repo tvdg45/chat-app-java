@@ -33,7 +33,7 @@ public class Admin_Chat_Interface {
         
         try {
         
-		out = response.getWriter()
+		out = response.getWriter();
         use_open_connection = Config.openConnection();
         
         String guest_full_name = "";
