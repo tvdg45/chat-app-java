@@ -7,7 +7,7 @@ import java.sql.Connection;
 import configuration.Config;
 import utilities.Form_Validation;
 import controllers.Control_Search_Company_Users;
-import java.io.OutputStream;
+import java.io.PrintWriter;
 import javax.servlet.http.*;
 
 import org.springframework.boot.*;
@@ -23,7 +23,7 @@ public class Admin_Chat_Interface {
     
     @RequestMapping(method = RequestMethod.GET)
     String home(
-			OutputStream out,
+			PrintWriter out,
             HttpServletRequest request,
             HttpServletResponse response,
             @RequestParam(value = "admin_session", defaultValue = "") String admin_session
@@ -33,7 +33,7 @@ public class Admin_Chat_Interface {
         
         try {
         
-		out = response.getOutputStream();
+		out = response.getWriter();
         use_open_connection = Config.openConnection();
         
         String guest_full_name = "";
