@@ -7,7 +7,7 @@ import java.sql.Connection;
 import configuration.Config;
 import utilities.Form_Validation;
 import controllers.Control_Search_Company_Users;
-//import java.io.PrintWriter;
+import java.io.PrintWriter;
 import javax.servlet.http.*;
 
 import org.springframework.boot.*;
@@ -703,7 +703,8 @@ public class Admin_Chat_Interface {
         } catch (IOException e) {
             
             return "";
-        }
+        } catch (ServletException e) {
+		}
     }
 	
     public static void main(String[] args) throws Exception, IOException {
