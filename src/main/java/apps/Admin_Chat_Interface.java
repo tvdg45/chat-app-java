@@ -704,6 +704,8 @@ public class Admin_Chat_Interface {
             
             return "";
         } catch (Exception e) {
+			
+			return e.getMessage();
 		}
     }
 	
