@@ -29,10 +29,11 @@ public class Admin_Chat_Interface {
     ) {
         
         Connection use_open_connection;
-		PrintWriter out = response.getWriter();
+		PrintWriter out;
         
         try {
         
+		out = response.getWriter()
         use_open_connection = Config.openConnection();
         
         String guest_full_name = "";
