@@ -23,13 +23,13 @@ public class Admin_Chat_Interface {
     
     @RequestMapping(method = RequestMethod.GET)
     String home(
+			PrintWriter out;
             HttpServletRequest request,
             HttpServletResponse response,
             @RequestParam(value = "admin_session", defaultValue = "") String admin_session
     ) {
         
         Connection use_open_connection;
-		PrintWriter out;
         
         try {
         
