@@ -2,39 +2,70 @@
 package apps;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 
 import java.sql.Connection;
 import configuration.Config;
 import utilities.Form_Validation;
 import controllers.Control_Search_Company_Users;
-import java.io.PrintWriter;
+
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.*;
 
-import org.springframework.boot.*;
-import org.springframework.boot.autoconfigure.*;
-import org.springframework.stereotype.*;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.View;
 
-@CrossOrigin(origins = "https://tdscloud-dev-ed--c.visualforce.com", maxAge = 3600)
-@RestController
-@EnableAutoConfiguration
-@RequestMapping("/admin-chat-interface")
-public class Admin_Chat_Interface {
+public class Admin_Chat_Interface implements View {
     
-    @RequestMapping(method = RequestMethod.GET)
-    String home(
-            HttpServletRequest request,
-            HttpServletResponse response,
-            @RequestParam(value = "admin_session", defaultValue = "") String admin_session
-    ) {
+    protected void processRequest(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+
+    }
+
+    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
+    /**
+    * Handles the HTTP <code>GET</code> method.
+    *
+    * @param request servlet request
+    * @param response servlet response
+    * @throws ServletException if a servlet-specific error occurs
+    * @throws IOException if an I/O error occurs
+    */
+    
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        //processRequest(request, response);
+    }
+    
+    /**
+    * Handles the HTTP <code>POST</code> method.
+    *
+    * @param request servlet request
+    * @param response servlet response
+    * @throws ServletException if a servlet-specific error occurs
+    * @throws IOException if an I/O error occurs
+    */
+    
+    @Override
+	@RequestMapping("/admin-chat-interface")
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        
+        processRequest(request, response);
+
+        response.addHeader("Access-Control-Allow-Origin", "https://tdscloud-dev-ed--c.visualforce.com");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+        
+        PrintWriter out = response.getWriter();
         
         Connection use_open_connection;
+  
+        use_open_connection = configuration.Config.openConnection();
         
-        try {
-        
-		PrintWriter out = response.getWriter();
-        use_open_connection = Config.openConnection();
-        
+        String admin_session;
         String guest_full_name = "";
         String guest_session = "";
         String conversation_owner = "";
@@ -697,19 +728,17 @@ public class Admin_Chat_Interface {
             out.println("});");
             out.println("</script>");
         }
-            
-            return "";
-        } catch (IOException e) {
-            
-            return "";
-        } catch (Exception e) {
-			
-			return e.getMessage();
-		}
     }
-	
-    public static void main(String[] args) throws Exception, IOException {
-		
-        SpringApplication.run(Admin_Chat_Interface.class, args);
-    }
+    
+    /**
+    * Returns a short description of the servlet.
+    *
+    * @return a String containing servlet description
+    */
+    
+    @Override
+    public String getServletInfo() {
+
+        return "Short description";
+    } // </editor-fold>
 }
