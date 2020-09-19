@@ -23,7 +23,7 @@ public class Admin_Chat_Interface {
     
     @RequestMapping(method = RequestMethod.GET)
     String home(
-			ServletOutputStream out,
+			OutputStream out,
             HttpServletRequest request,
             HttpServletResponse response,
             @RequestParam(value = "admin_session", defaultValue = "") String admin_session
