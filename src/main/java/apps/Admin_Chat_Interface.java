@@ -21,7 +21,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/admin-chat-interface")
 public class Admin_Chat_Interface {
     
-    @RequestMapping(method = RequestMethod.POST)
+    @RequestMapping(method = RequestMethod.GET)
     String home(
             HttpServletRequest request,
             HttpServletResponse response,
