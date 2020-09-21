@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Object[] sources = new Object[12];
+        Object[] sources = new Object[13];
         
         sources[0] = Directory_Hider.class;
         sources[1] = apps.Admin_Change_User_Status.class;
@@ -20,6 +20,7 @@ public class Main {
 		sources[9] = apps.Chat_Interface.class;
 		sources[10] = apps.Check_User_Status.class;
 		sources[11] = apps.Create_Message.class;
+		sources[12] = apps.Log_In.class;
 		
         SpringApplication.run(sources, args);
     }
