@@ -19,7 +19,7 @@ public class Main {
 		sources[8] = apps.Change_User_Status.class;
 		sources[9] = apps.Chat_Interface.class;
 		sources[10] = apps.Check_User_Status.class;
-		sources[12] = apps.Create_Message.class;
+		sources[11] = apps.Create_Message.class;
 		
         SpringApplication.run(sources, args);
     }
