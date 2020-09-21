@@ -6,7 +6,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        Object[] sources = new Object[15];
+        Object[] sources = new Object[9];
         
         sources[0] = Directory_Hider.class;
         sources[1] = apps.Admin_Change_User_Status.class;
