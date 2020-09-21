@@ -39,7 +39,7 @@ public class Chat_Interface extends HttpServlet {
     */
     
     @Override
-    @PostMapping("/chat-interface")
+    @GetMapping("/chat-interface")
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
         processRequest(request, response);
