@@ -13,7 +13,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.*;
 
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
@@ -85,27 +84,6 @@ public class Log_In extends HttpServlet {
                         "; SameSite=None; Secure; Max-Age=86400");
                 response.addHeader("Set-Cookie", "conversation_owner=" + String.valueOf(request.getParameter("select_person")) +
                         "; SameSite=None; Secure; Max-Age=86400");
-                
-                /*Cookie guest_full_name = new Cookie("guest_full_name", String.valueOf(request.getParameter("full_name")));
-                
-                guest_full_name.setSecure(true);
-                guest_full_name.setMaxAge(86400);
-                
-                response.addCookie(guest_full_name);
-        
-                Cookie guest_session = new Cookie("guest_session", String.valueOf(request.getParameter("guest_session")));
-                
-                guest_session.setSecure(true);
-                guest_session.setMaxAge(86400);
-                
-                response.addCookie(guest_session);
-            
-                Cookie conversation_owner = new Cookie("conversation_owner", String.valueOf(request.getParameter("select_person")));
-                
-                conversation_owner.setSecure(true);
-                conversation_owner.setMaxAge(86400);
-        
-                response.addCookie(conversation_owner);*/
                 
                 out.println("<script type=\"text/javascript\" src=\"https://chat-app-node-1.herokuapp.com/socket.io/socket.io.js\"></script>");
                 out.println("<script type=\"text/javascript\">");
