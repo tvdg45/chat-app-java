@@ -45,6 +45,7 @@ public class Chat_Interface extends HttpServlet {
         processRequest(request, response);
         
         response.setContentType("text/html");
+		response.setHeader("Set-Cookie", "key=value; HttpOnly; SameSite=none")
         response.addHeader("Access-Control-Allow-Origin", "https://www.timothysdigitalsolutions.com");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
