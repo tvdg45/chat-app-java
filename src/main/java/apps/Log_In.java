@@ -79,11 +79,11 @@ public class Log_In extends HttpServlet {
             if (Control_Search_Company_Users.control_search_company_users(String.valueOf(request.getParameter("select_person"))).contains("Available - online")
                 || Control_Search_Company_Users.control_search_company_users(String.valueOf(request.getParameter("select_person"))).contains("Available - offline")) {
                 
-                response.setHeader("Set-Cookie", "guest_full_name=" + String.valueOf(request.getParameter("full_name")) +
+                response.addHeader("Set-Cookie", "guest_full_name=" + String.valueOf(request.getParameter("full_name")) +
                         "; SameSite=None; Secure; Max-Age=86400");
-                response.setHeader("Set-Cookie", "guest_session=" + String.valueOf(request.getParameter("guest_session")) +
+                response.addHeader("Set-Cookie", "guest_session=" + String.valueOf(request.getParameter("guest_session")) +
                         "; SameSite=None; Secure; Max-Age=86400");
-                response.setHeader("Set-Cookie", "conversation_owner=" + String.valueOf(request.getParameter("select_person")) +
+                response.addHeader("Set-Cookie", "conversation_owner=" + String.valueOf(request.getParameter("select_person")) +
                         "; SameSite=None; Secure; Max-Age=86400");
                 
                 /*Cookie guest_full_name = new Cookie("guest_full_name", String.valueOf(request.getParameter("full_name")));
