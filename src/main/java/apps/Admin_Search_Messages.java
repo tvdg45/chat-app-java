@@ -15,7 +15,6 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.*;
 
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
@@ -97,23 +96,9 @@ public class Admin_Search_Messages extends HttpServlet {
             //Log out any guest, relating to a change in an administrator's availability status.
             try {
       
-                Cookie cookie_guest_full_name = new Cookie("guest_full_name", "");
-        
-                cookie_guest_full_name.setMaxAge(0);
-        
-                response.addCookie(cookie_guest_full_name);
-        
-                Cookie cookie_guest_session = new Cookie("guest_session", "");
-        
-                cookie_guest_session.setMaxAge(0);
-        
-                response.addCookie(cookie_guest_session);
-            
-                Cookie cookie_conversation_owner = new Cookie("conversation_owner", "");
-        
-                cookie_conversation_owner.setMaxAge(0);
-        
-                response.addCookie(cookie_conversation_owner);
+                response.addHeader("Set-Cookie", "guest_full_name=; SameSite=None; Secure; Max-Age=0");
+                response.addHeader("Set-Cookie", "guest_session=; SameSite=None; Secure; Max-Age=0");
+                response.addHeader("Set-Cookie", "conversation_owner=; SameSite=None; Secure; Max-Age=0");
                 
                 if (Form_Validation.is_string_null_or_white_space(admin_session)) {
                     
