@@ -45,7 +45,7 @@ public class Chat_Interface extends HttpServlet {
         processRequest(request, response);
         
         response.setContentType("text/html");
-        response.addHeader("Access-Control-Allow-Origin", "https://tdscloud-dev-ed--c.visualforce.com");
+        response.addHeader("Access-Control-Allow-Origin", "https://www.timothysdigitalsolutions.com");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
