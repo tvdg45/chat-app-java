@@ -90,7 +90,16 @@ public class Admin_Chat_Interface extends HttpServlet {
   
         //Attempt to find a logged in guest.
         try {
-			
+      
+            Cookie each_cookie[] = request.getCookies();
+            
+            if (each_cookie.length == 3) {
+                
+                guest_full_name = each_cookie[0].getValue();
+                guest_session = each_cookie[1].getValue();
+                conversation_owner = each_cookie[2].getValue();
+            } else {
+                
                 response.addHeader("Set-Cookie", "guest_full_name=; SameSite=None; Secure; Max-Age=0");
                 response.addHeader("Set-Cookie", "guest_session=; SameSite=None; Secure; Max-Age=0");
                 response.addHeader("Set-Cookie", "conversation_owner=; SameSite=None; Secure; Max-Age=0");
