@@ -7,12 +7,12 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import configuration.Config;
 import controllers.Control_Search_Company_Users;
+import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.*;
 
 import org.springframework.boot.*;
 import org.springframework.boot.autoconfigure.*;
