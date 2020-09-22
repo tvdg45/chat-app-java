@@ -81,11 +81,11 @@ public class Log_In extends HttpServlet {
                 Date expires_date = new Date(new Date().getTime() + 86400);
                 
                 response.setHeader("Set-Cookie", "guest_full_name=" + String.valueOf(request.getParameter("full_name")) +
-                        "; HttpOnly; SameSite=None; Secure; Expires=" + expires_date);
+                        "; SameSite=None; Secure; Expires=" + expires_date);
                 response.setHeader("Set-Cookie", "guest_session=" + String.valueOf(request.getParameter("guest_session")) +
-                        "; HttpOnly; SameSite=None; Secure; Expires=" + expires_date);
+                        "; SameSite=None; Secure; Expires=" + expires_date);
                 response.setHeader("Set-Cookie", "conversation_owner=" + String.valueOf(request.getParameter("select_person")) +
-                        "; HttpOnly; SameSite=None; Secure; Expires=" + expires_date);
+                        "; SameSite=None; Secure; Expires=" + expires_date);
                 /*Cookie guest_full_name = new Cookie("guest_full_name", String.valueOf(request.getParameter("full_name")));
         
                 guest_full_name.setMaxAge(86400);
