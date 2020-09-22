@@ -108,23 +108,9 @@ public class Create_Message extends HttpServlet {
                 conversation_owner = each_cookie[2].getValue();
             } else {
                 
-                Cookie cookie_guest_full_name = new Cookie("guest_full_name", "");
-        
-                cookie_guest_full_name.setMaxAge(0);
-        
-                response.addCookie(cookie_guest_full_name);
-        
-                Cookie cookie_guest_session = new Cookie("guest_session", "");
-        
-                cookie_guest_session.setMaxAge(0);
-        
-                response.addCookie(cookie_guest_session);
-            
-                Cookie cookie_conversation_owner = new Cookie("conversation_owner", "");
-        
-                cookie_conversation_owner.setMaxAge(0);
-        
-                response.addCookie(cookie_conversation_owner);
+                response.addHeader("Set-Cookie", "guest_full_name=; SameSite=None; Secure; Max-Age=0");
+                response.addHeader("Set-Cookie", "guest_session=; SameSite=None; Secure; Max-Age=0");
+                response.addHeader("Set-Cookie", "conversation_owner=; SameSite=None; Secure; Max-Age=0");
                 
                 out.println("<script type=\"text/javascript\">");
                 out.println("window.location = document.location.href.replace(\"#\", \"\");");
