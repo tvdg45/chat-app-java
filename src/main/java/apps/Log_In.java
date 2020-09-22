@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.sql.Connection;
 import configuration.Config;
 import controllers.Control_Search_Company_Users;
-import java.util.Date;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
