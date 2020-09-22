@@ -72,13 +72,19 @@ public class Log_In extends HttpServlet {
         use_open_connection = Config.openConnection();
         
         Control_Search_Company_Users.use_connection = use_open_connection;
-        
+		
         if (String.valueOf(request.getParameter("log_in")).equals("Log in")) {
             
             if (Control_Search_Company_Users.control_search_company_users(String.valueOf(request.getParameter("select_person"))).contains("Available - online")
                 || Control_Search_Company_Users.control_search_company_users(String.valueOf(request.getParameter("select_person"))).contains("Available - offline")) {
-        
-                Cookie guest_full_name = new Cookie("guest_full_name", String.valueOf(request.getParameter("full_name")));
+                
+                response.setHeader("Set-Cookie", "guest_full_name=" + String.valueOf(request.getParameter("full_name")) +
+                        "; HttpOnly; SameSite=None; Secure");
+                response.setHeader("Set-Cookie", "guest_session=" + String.valueOf(request.getParameter("guest_session")) +
+                        "; HttpOnly; SameSite=None; Secure");
+                response.setHeader("Set-Cookie", "conversation_owner=" + String.valueOf(request.getParameter("select_person")) +
+                        "; HttpOnly; SameSite=None; Secure");
+                /*Cookie guest_full_name = new Cookie("guest_full_name", String.valueOf(request.getParameter("full_name")));
         
                 guest_full_name.setMaxAge(86400);
         
@@ -87,6 +93,8 @@ public class Log_In extends HttpServlet {
                 Cookie guest_session = new Cookie("guest_session", String.valueOf(request.getParameter("guest_session")));
         
                 guest_session.setMaxAge(86400);
+                
+                guest_session.
         
                 response.addCookie(guest_session);
             
@@ -94,7 +102,7 @@ public class Log_In extends HttpServlet {
         
                 conversation_owner.setMaxAge(86400);
         
-                response.addCookie(conversation_owner);
+                response.addCookie(conversation_owner);*/
                 
                 out.println("<script type=\"text/javascript\" src=\"https://chat-app-node-1.herokuapp.com/socket.io/socket.io.js\"></script>");
                 out.println("<script type=\"text/javascript\">");
