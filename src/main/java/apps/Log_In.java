@@ -78,33 +78,34 @@ public class Log_In extends HttpServlet {
             if (Control_Search_Company_Users.control_search_company_users(String.valueOf(request.getParameter("select_person"))).contains("Available - online")
                 || Control_Search_Company_Users.control_search_company_users(String.valueOf(request.getParameter("select_person"))).contains("Available - offline")) {
                 
-                Date expires_date = new Date(new Date().getTime() + 86400);
+                /*Date expires_date = new Date(new Date().getTime() + 86400);
                 
                 response.setHeader("Set-Cookie", "guest_full_name=" + String.valueOf(request.getParameter("full_name")) +
                         "; SameSite=None; Secure; Expires=" + expires_date);
                 response.setHeader("Set-Cookie", "guest_session=" + String.valueOf(request.getParameter("guest_session")) +
                         "; SameSite=None; Secure; Expires=" + expires_date);
                 response.setHeader("Set-Cookie", "conversation_owner=" + String.valueOf(request.getParameter("select_person")) +
-                        "; SameSite=None; Secure; Expires=" + expires_date);
-                /*Cookie guest_full_name = new Cookie("guest_full_name", String.valueOf(request.getParameter("full_name")));
-        
+                        "; SameSite=None; Secure; Expires=" + expires_date);*/
+                Cookie guest_full_name = new Cookie("guest_full_name", String.valueOf(request.getParameter("full_name")));
+                
+                guest_full_name.setSecure(true);
                 guest_full_name.setMaxAge(86400);
         
                 response.addCookie(guest_full_name);
         
                 Cookie guest_session = new Cookie("guest_session", String.valueOf(request.getParameter("guest_session")));
-        
+                
+                guest_session.setSecure(true);
                 guest_session.setMaxAge(86400);
                 
-                guest_session.
-        
                 response.addCookie(guest_session);
             
                 Cookie conversation_owner = new Cookie("conversation_owner", String.valueOf(request.getParameter("select_person")));
-        
+                
+                conversation_owner.setSecure(true);
                 conversation_owner.setMaxAge(86400);
         
-                response.addCookie(conversation_owner);*/
+                response.addCookie(conversation_owner);
                 
                 out.println("<script type=\"text/javascript\" src=\"https://chat-app-node-1.herokuapp.com/socket.io/socket.io.js\"></script>");
                 out.println("<script type=\"text/javascript\">");
