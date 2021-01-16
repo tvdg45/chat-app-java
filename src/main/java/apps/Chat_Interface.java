@@ -789,10 +789,744 @@ public class Chat_Interface extends HttpServlet {
     */
     
     @Override
+    @PostMapping("/chat-interface")
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         
-        //processRequest(request, response);
+        processRequest(request, response);
+        
+        response.setContentType("text/html");
+        response.addHeader("Access-Control-Allow-Origin", "*");
+        response.setHeader("Access-Control-Allow-Credentials", "true");
+        response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
+        response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
+        
+        PrintWriter out = response.getWriter();
+        
+        Connection use_open_connection;
+  
+        use_open_connection = Config.openConnection();
+        
+        String admin_session = "";
+        String guest_full_name = "";
+        String guest_session = "";
+        String conversation_owner = "";
+        String user_status;
+        
+        out.println("<!DOCTYPE html>");
+        out.println("<html xmlns=\"https://www.w3.org/1999/xhtml\" lang=\"en\">");
+        out.println("<head>");
+        out.println("<title>Chat application | Timothy's Digital Solutions</title>");
+        out.println("<link rel=\"icon\" href=\"https://www.timothysdigitalsolutions.com/images/timothys-digital-solutions-icon-background.png\" sizes=\"32x32\" />");
+        out.println("</head>");
+        out.println("<body style=\"text-align: left; width: 90%; background-color: #FBDFCC; margin-top: auto; margin-bottom: auto; font-family: Arial, Helvetica, sans-serif;\">");
+		out.println("<label>If page does not load, click <a href=\"https://chat-app-java.herokuapp.com/chat-interface\">here</a> to refresh.</label><br /><br />");
+        out.println("<style type=\"text/css\">");
+        out.println("#message img, #thread img { width: 98%; margin-left: 1%; margin-right: 1%; }");
+        out.println("label:hover { cursor: text; }");
+        out.println("input[type=text], input[type=password], textarea, #message, select { font-family: arial, sans-serif; font-size: 12pt; background-color: white; color: #5A403B; border: 2px solid; padding: 2px; border-color: #5A403B; }");
+        out.println("input[type=text]:focus, input[type=password]:focus, select:focus, textarea:focus, #message:focus { background-color: white; border-color: #5A403B; color: #5A403B; border: 2px solid; padding: 2px; cursor: pointer; }");
+        out.println("input[type=submit], input[type=button] { font-size: 14pt; background-color: #5A403B; color: #FBDFCC; border: 2px solid; padding: 3px; cursor: pointer; }");
+        out.println("input[type=submit]:hover, input[type=button]:hover, input[type=submit]:focus, input[type=button]:focus { font-size: 14pt; background-color: transparent; border-color: #5A403B; color: #5A403B; border: 2px solid; padding: 3px; cursor: pointer; }");
+        out.println("");
+        out.println("::-webkit-scrollbar {");
+        out.println("");
+        out.println("width: 10px;");
+        out.println("}");
+        out.println("");
+        out.println("::-webkit-scrollbar-track {");
+        out.println("");
+        out.println("box-shadow: inset 0 0 100px #c5884a;");
+        out.println("border-radius: 5px;");
+        out.println("}");
+        out.println("");
+        out.println("::-webkit-scrollbar-thumb {");
+        out.println("");
+        out.println("background: #83572a;");
+        out.println("border-radius: 5px;");
+        out.println("}");
+        out.println("");
+        out.println("::-webkit-scrollbar-thumb:hover {");
+        out.println("");
+        out.println("background: #83572a;");
+        out.println("}");
+        out.println("");
+        out.println("a, a:visited, a:hover { color: brown; text-decoration: none; }");
+        out.println("</style>");
+        out.println("");
+        out.println("<script type=\"text/javascript\" src=\"https://www.timothysdigitalsolutions.com/backstretch/js/jquery-3.2.1.js\"></script>");
+        out.println("<script type=\"text/javascript\" src=\"https://www.timothysdigitalsolutions.com/backstretch/js/jquery.min.js\"></script>");
+        out.println("<script type=\"text/javascript\" src=\"https://www.timothysdigitalsolutions.com/backstretch/js/jquery.backstretch.js\"></script>");
+        out.println("<script type=\"text/javascript\" src=\"https://chat-app-node-1.herokuapp.com/socket.io/socket.io.js\"></script>");
+        out.println("<script type=\"text/javascript\">");
+        out.println("");
+        out.println("if (location.protocol != \"https:\") {");
+        out.println("");
+        out.println("location.href = \"https://chat-app-java.herokuapp.com/chat-interface\";");
+        out.println("}");
+        out.println("</script>");
+  
+        //Attempt to find a logged in guest.
+        try {
+      
+            Cookie each_cookie[] = request.getCookies();
+            
+            if (each_cookie.length == 3) {
+                
+                guest_full_name = each_cookie[0].getValue();
+                guest_session = each_cookie[1].getValue();
+                conversation_owner = each_cookie[2].getValue();
+            } else {
+                
+                response.addHeader("Set-Cookie", "guest_full_name=; SameSite=None; Secure; Max-Age=0");
+                response.addHeader("Set-Cookie", "guest_session=; SameSite=None; Secure; Max-Age=0");
+                response.addHeader("Set-Cookie", "conversation_owner=; SameSite=None; Secure; Max-Age=0");
+                
+                out.println("<script type=\"text/javascript\">");
+                out.println("window.location = document.location.href.replace(\"#\", \"\");");
+                out.println("</script>");
+            } 
+        } catch (NullPointerException e) {
+      
+            if (e.getMessage() == null) {
+        
+                guest_full_name = "";
+                guest_session = "";
+                conversation_owner = "";
+            }
+        }
+        
+        if (!(admin_session.equals("")) || (!(guest_full_name.equals("")) && !(guest_session.equals(""))
+            && !(conversation_owner.equals("")))) {
+            
+            out.println("<script type=\"text/javascript\">");
+            out.println("function check_html(html) {\n" +
+                    "	\n" +
+                    "	var doc = document.createElement('div');\n" +
+                    "	\n" +
+                    "	doc.innerHTML = html;\n" +
+                    "	\n" +
+                    "	return (doc.innerHTML === html);\n" +
+                    "}");
+            out.println("");
+            out.println("var number_of_submissions = 0;");
+            out.println("");
+            out.println("setInterval(function() {");
+            out.println("");
+            out.println("number_of_submissions = 0;");
+            out.println("}, 1000);");
+            out.println("");
+            out.println("function send_message() {");
+            out.println("");
+            out.println("number_of_submissions++;");
+            out.println("");
+            out.println("document.getElementById(\"message\").innerHTML = " +
+                    "document.getElementById(\"message\").innerHTML.replace(/<div><br><\\/div><div><br><\\/div>/g, \"\");");
+            out.println("");
+            out.println("if (number_of_submissions <= 1 " +
+                    "&& document.getElementById(\"message\").innerHTML != \"\" " +
+                    "&& document.getElementById(\"message\").innerHTML.replace(/<div><br><\\/div><div><br><\\/div>/g, \"\").length > 0 " +
+                    "&& document.getElementById(\"message\").innerHTML.replace(/\\s/g, \"\").length > 0) {");
+            out.println("");
+            out.println("var xhttp = new XMLHttpRequest();");
+            out.println("");
+            out.println("xhttp.onreadystatechange = function() {");
+            out.println("");
+            out.println("if (this.readyState == 4 && this.status == 200) {");
+            out.println("");
+            out.println("$(\"#send_message\").html(this.responseText);");
+            out.println("}");
+            out.println("};");
+            out.println("");
+            out.println("xhttp.open(\"POST\", \"" + Config.third_party_domain() + "/admin-create-message\");");
+            out.println("xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");");
+            out.println("");
+            out.println("var message = \"\";");
+            out.println("");
+            out.println("if (!(check_html(document.getElementById(\"message\").innerHTML.replace(/<a/g, \"<a target=\\\"_blank\\\"\")))) {");
+            out.println("");
+            out.println("message = document.getElementById(\"message\").innerHTML.replace(/<a/g, \"<a target=\\\"_blank\\\"\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");");
+            out.println("} else {");
+            out.println("");
+            out.println("message = document.getElementById(\"message\").innerHTML.replace(/<a/g, \"<a target=\\\"_blank\\\"\");");
+            out.println("}");
+            
+            if (!(Form_Validation.is_string_null_or_white_space(admin_session))) {
+                
+                out.println("xhttp.send(\"message=\" + message + \"&admin_session=" + admin_session + "&create_message=Send\");");
+            } else {
+                
+                out.println("xhttp.send(\"message=\" + message + \"&create_message=Send\");");
+            }
+            
+            out.println("");
+            out.println("document.getElementById(\"message\").innerHTML = \"\";");
+            out.println("}");
+            out.println("}");
+            out.println("");
+            out.println("var socket = io.connect(\"https://chat-app-node-1.herokuapp.com\");");
+            out.println("");
+            out.println("window.onload = function() {");
+            out.println("");
+            out.println("var xhttp = new XMLHttpRequest();");
+            out.println("");
+            out.println("xhttp.onreadystatechange = function() {");
+            out.println("");
+            out.println("if (this.readyState == 4 && this.status == 200) {");
+            out.println("");
+            out.println("var compare_socket_data = \"\";");
+            out.println("");
+            
+            if (!(Form_Validation.is_string_null_or_white_space(admin_session))) {
+                
+                out.println("compare_socket_data = \"" + admin_session + "\";");
+            } else {
+                
+                out.println("compare_socket_data = \"" + conversation_owner + "\";");
+            }
+            
+            out.println("");
+            out.println("if (this.responseText != \"\" && this.responseText.replace(/\\s/g, \"\").length != 0 && this.responseText != \"[object XMLDocument]\") {");
+            out.println("");
+            out.println("var live_thread;");
+            out.println("var thread_content = \"\";");
+            out.println("");
+            out.println("live_thread = JSON.parse(this.responseText.replace(\", {}\", \"\"));");
+            out.println("");
+            
+            if (Form_Validation.is_string_null_or_white_space(admin_session)) {
+                
+                out.println("if (live_thread[0][\"user_id\"] == \"log user out\") {");
+                out.println("");
+                out.println("window.location = document.location.href.replace(\"#\", \"\");");
+                out.println("}");
+            }
+            
+            out.println("");
+            out.println("for (var i = 0; i < live_thread.length; i++) {");
+            out.println("");
+            
+            if (!(Form_Validation.is_string_null_or_white_space(admin_session))) {
 
+                out.println("if (live_thread[i][\"conversation_owner\"] == \"" + admin_session + "\") {");
+                out.println("");
+                out.println("thread_content += \"<div style='text-align: left; padding-top: 20px; " +
+                        "padding-bottom: 20px; word-wrap: break-word'>\";");
+                out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                        "<label style='font-size: 12pt'><b>\" + live_thread[i][\"full_name\"] + \":</b> \";");
+                out.println("");
+                out.println("if (!(check_html(live_thread[i][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\")))) {");
+                out.println("");
+                out.println("thread_content += live_thread[i][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");");
+                out.println("} else {");
+                out.println("");
+                out.println("thread_content += live_thread[i][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\");");
+                out.println("}");
+                out.println("");
+                out.println("thread_content += \"</label><br /><br />\";");
+                out.println("thread_content += \"</div>\";");
+                out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                        "<label style='font-size: 12pt'><b>On \" + live_thread[i][\"date_received\"] + \" at " +
+                        "\" + live_thread[i][\"time_received\"] + \"</b></label>\";");
+                out.println("thread_content += \"</div>\";");
+                out.println("thread_content += \"</div>\";");
+                out.println("}");
+            } else {
+                
+                Control_Search_Company_Users.use_connection = use_open_connection;
+                
+                user_status = Control_Search_Company_Users.control_search_company_user_status(conversation_owner);
+                
+                if (!(user_status.equals("Available - online"))) {
+                    
+                    if (user_status.equals("Available - offline")) {
+                        
+                        out.println("if (live_thread[i][\"user_id\"] == \"" + guest_session + "\" && " +
+                                "live_thread[i][\"conversation_owner\"] == \"" + conversation_owner + "\") {");
+                        out.println("");
+                        out.println("thread_content += \"<div style='text-align: left; padding-top: 20px; " +
+                                "padding-bottom: 20px; word-wrap: break-word'>\";");
+                        out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                                "<label style='font-size: 12pt'><b>\" + live_thread[i][\"full_name\"] + \":</b> \";");
+                        out.println("");
+                        out.println("if (!(check_html(live_thread[i][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\")))) {");
+                        out.println("");
+                        out.println("thread_content += live_thread[i][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");");
+                        out.println("} else {");
+                        out.println("");
+                        out.println("thread_content += live_thread[i][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\");");
+                        out.println("}");
+                        out.println("");
+                        out.println("thread_content += \"</label><br /><br />\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                                "<label style='font-size: 12pt'><b>On \" + live_thread[i][\"date_received\"] + \" at " +
+                                "\" + live_thread[i][\"time_received\"] + \"</b></label>\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("}");                        
+                    } else {
+                        
+                        out.println("if (live_thread[i][\"conversation_owner\"] == \"" + conversation_owner + "\") {");
+                        out.println("");
+                        out.println("thread_content += \"<div style='text-align: left; padding-top: 20px; " +
+                                "padding-bottom: 20px; word-wrap: break-word'>\";");
+                        out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                                "<label style='font-size: 12pt'><b>\" + live_thread[i][\"full_name\"] + \":</b> \";");
+                        out.println("");
+                        out.println("if (!(check_html(live_thread[i][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\")))) {");
+                        out.println("");
+                        out.println("thread_content += live_thread[i][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");");
+                        out.println("} else {");
+                        out.println("");
+                        out.println("thread_content += live_thread[i][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\");");
+                        out.println("}");
+                        out.println("");
+                        out.println("thread_content += \"</label><br /><br />\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                                "<label style='font-size: 12pt'><b>On \" + live_thread[i][\"date_received\"] + \" at " +
+                                "\" + live_thread[i][\"time_received\"] + \"</b></label>\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("}");                        
+                    }
+                }                
+            }
+            
+            out.println("}");
+            out.println("");
+            out.println("$(\"#thread\").html(thread_content);");
+            out.println("document.getElementById(\"conversation\").scrollTop = document.getElementById(\"conversation\").scrollHeight - document.getElementById(\"conversation\").clientHeight;");
+            out.println("} else {");
+            out.println("");
+            out.println("$(\"#thread\").html(\"\");");
+            out.println("}");
+            out.println("}");
+            out.println("};");
+            out.println("");
+            out.println("xhttp.open(\"POST\", \"" + Config.third_party_domain() + "/admin-search-messages\");");
+            out.println("xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");");
+            out.println("");
+            
+            if (!(Form_Validation.is_string_null_or_white_space(admin_session))) {
+                
+                out.println("xhttp.send(\"conversation_owner=" + admin_session + "&admin_session=" + admin_session + "\");");
+            } else {
+                
+                out.println("xhttp.send(\"conversation_owner=" + conversation_owner + "\");");
+            }
+            
+            out.println("}");
+            
+            if (!(Form_Validation.is_string_null_or_white_space(conversation_owner))
+                && Form_Validation.is_string_null_or_white_space(admin_session)) {
+                
+                out.println("");
+                out.println("socket.on('log_other_users_out', function(data) {");
+                out.println("");
+                out.println("if (data == \"" + conversation_owner + "\") {");
+                out.println("");
+                out.println("log_out();");
+                out.println("}");
+                out.println("});");
+            }
+            
+            if (!(Form_Validation.is_string_null_or_white_space(admin_session))) {
+
+                out.println("");
+                out.println("socket.on('refresh_admin_window', function(data) {");
+                out.println("");
+                out.println("if (data == \"" + admin_session + "\") {");
+                out.println("");
+                out.println("window.location = document.location.href.replace(\"#\", \"\");");
+                out.println("}");
+                out.println("});");
+            }
+            
+            out.println("");
+            out.println("socket.on('load_threads', function(data) {");
+            out.println("");
+            out.println("var live_thread;");
+            out.println("var thread_content = \"\";");
+            out.println("");
+            out.println("live_thread = data;");
+            out.println("");
+            
+            Control_Search_Company_Users.use_connection = use_open_connection;
+            
+            user_status = Control_Search_Company_Users.control_search_company_user_status(conversation_owner);
+            
+            if (!(Form_Validation.is_string_null_or_white_space(admin_session))) {
+                
+                out.println("if (live_thread[0][\"conversation_owner\"] == \"" + admin_session + "\") {");
+                out.println("");
+                out.println("thread_content += \"<div style='text-align: left; padding-top: 20px; " +
+                        "padding-bottom: 20px; word-wrap: break-word'>\";");
+                out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                        "<label style='font-size: 12pt'><b>\" + live_thread[0][\"full_name\"] + \":</b> \";");
+                out.println("");
+                out.println("if (!(check_html(live_thread[0][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\")))) {");
+                out.println("");
+                out.println("thread_content += live_thread[0][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");");
+                out.println("} else {");
+                out.println("");
+                out.println("thread_content += live_thread[0][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\");");
+                out.println("}");
+                out.println("");
+                out.println("thread_content += \"</label><br /><br />\";");
+                out.println("thread_content += \"</div>\";");
+                out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                        "<label style='font-size: 12pt'><b>On \" + live_thread[0][\"date_received\"] + \" at " +
+                        "\" + live_thread[0][\"time_received\"] + \"</b></label>\";");
+                out.println("thread_content += \"</div>\";");
+                out.println("thread_content += \"</div>\";");
+                out.println("}");
+                out.println("");
+                out.println("$(\"#thread\").append(thread_content);");
+            } else {
+
+                switch (user_status) {
+                    case "Available - offline":
+                        
+                        out.println("if (live_thread[0][\"user_id\"] == \"" + guest_session + "\" && " +
+                                "live_thread[0][\"conversation_owner\"] == \"" + conversation_owner + "\") {");
+                        out.println("");
+                        out.println("thread_content += \"<div style='text-align: left; padding-top: 20px; " +
+                                "padding-bottom: 20px; word-wrap: break-word'>\";");
+                        out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                        "<label style='font-size: 12pt'><b>\" + live_thread[0][\"full_name\"] + \":</b> \";");
+                        out.println("");
+                        out.println("if (!(check_html(live_thread[0][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\")))) {");
+                        out.println("");
+                        out.println("thread_content += live_thread[0][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");");
+                        out.println("} else {");
+                        out.println("");
+                        out.println("thread_content += live_thread[0][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\");");
+                        out.println("}");
+                        out.println("");
+                        out.println("thread_content += \"</label><br /><br />\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                                "<label style='font-size: 12pt'><b>On \" + live_thread[0][\"date_received\"] + \" at " +
+                                "\" + live_thread[0][\"time_received\"] + \"</b></label>\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("}");
+                        out.println("");
+                        out.println("$(\"#thread\").append(thread_content);");
+                        
+                        break;
+                    case "Occupied":
+                        
+                        out.println("if (live_thread[0][\"conversation_owner\"] == \"" + conversation_owner + "\") {");
+                        out.println("");
+                        out.println("thread_content += \"<div style='text-align: left; padding-top: 20px; " +
+                                "padding-bottom: 20px; word-wrap: break-word'>\";");
+                        out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                        "<label style='font-size: 12pt'><b>\" + live_thread[0][\"full_name\"] + \":</b> \";");
+                        out.println("");
+                        out.println("if (!(check_html(live_thread[0][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\")))) {");
+                        out.println("");
+                        out.println("thread_content += live_thread[0][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\").replace(/</g, \"&lt;\").replace(/>/g, \"&gt;\");");
+                        out.println("} else {");
+                        out.println("");
+                        out.println("thread_content += live_thread[0][\"message\"].replace(/&apos;/g, \"'\").replace(/&quot;/g, \"\\\"\");");
+                        out.println("}");
+                        out.println("");
+                        out.println("thread_content += \"</label><br /><br />\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("thread_content += \"<div style='text-align: left; width: 100%'>" +
+                                "<label style='font-size: 12pt'><b>On \" + live_thread[0][\"date_received\"] + \" at " +
+                                "\" + live_thread[0][\"time_received\"] + \"</b></label>\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("thread_content += \"</div>\";");
+                        out.println("}");
+                        out.println("");
+                        out.println("$(\"#thread\").append(thread_content);");
+                        
+                        break;
+                }
+            }
+            
+            out.println("");
+            out.println("document.getElementById(\"conversation\").scrollTop = document.getElementById(\"conversation\").scrollHeight - document.getElementById(\"conversation\").clientHeight;");
+            out.println("});");
+            out.println("");
+            out.println("function log_out() {");
+            out.println("");
+            out.println("var xhttp = new XMLHttpRequest();");
+            out.println("");
+            out.println("xhttp.onreadystatechange = function() {");
+            out.println("");
+            out.println("if (this.readyState == 4 && this.status == 200) {");
+            out.println("");
+            out.println("$(\"#conversation\").html(this.responseText);");
+            out.println("}");
+            out.println("};");
+            out.println("");
+            out.println("xhttp.open(\"POST\", \"" + Config.third_party_domain() + "/log-out\");");
+            out.println("xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");");
+            out.println("");
+            out.println("xhttp.send(\"log_out=Log out\");");
+            out.println("}");
+            out.println("");
+            out.println("function clear_message() {");
+            out.println("");
+            out.println("var default_message = document.getElementById(\"message\").innerHTML;");
+            out.println("");
+            out.println("if (default_message == \"<label>message</label>\") {");
+            out.println("");
+            out.println("document.getElementById(\"message\").innerHTML = \"\";");
+            out.println("}");
+            out.println("}");
+            out.println("");
+            out.println("function default_message() {");
+            out.println("");
+            out.println("var default_message = document.getElementById(\"message\").innerHTML;");
+            out.println("");
+            out.println("if (default_message == \"\") {");
+            out.println("");
+            out.println("document.getElementById(\"message\").innerHTML = \"<label>message</label>\";");
+            out.println("}");
+            out.println("}");
+            out.println("</script>");
+            out.println("<div id=\"conversation\" style=\"text-align: left; min-height: 350px; max-height: 350px; overflow: auto; width: 100%\">");
+            out.println("<div id=\"thread\" style=\"text-align: left; width: 100%\"></div>");
+            out.println("</div>");
+            out.println("<div style=\"text-align: left; width: 100%\"><br />");
+            out.println("<div id=\"message\" contenteditable=\"true\" onfocusout=\"default_message()\" onfocus=\"clear_message()\" style=\"width: 100%; overflow: auto; min-height: 100px; max-height: 100px\"><label>message</label></div>");
+            out.println("<br /><br /><input id=\"create_message\" type=\"button\" value=\"Send\" onclick=\"send_message()\" />");
+            
+            if (Form_Validation.is_string_null_or_white_space(admin_session)) {
+            
+                out.println("<input id=\"sign_out\" type=\"button\" value=\"Leave chat\" onclick=\"log_out()\" />");
+            } else {
+                
+                Control_Search_Company_Users.use_connection = use_open_connection;
+                
+                if (!(Control_Search_Company_Users.control_search_company_user_status(admin_session).equals("Occupied"))) {
+                    
+                    out.println("");
+                    out.println("<script type=\"text/javascript\">");
+                    out.println("document.getElementById(\"message\").innerHTML = \"<label>message</label>\";");
+                    out.println("document.getElementById(\"message\").contentEditable = false;");
+                    out.println("document.getElementById(\"create_message\").disabled = true;");
+                    out.println("</script>");
+                }
+            }
+            
+            out.println("</div>");
+            
+            if (!(Form_Validation.is_string_null_or_white_space(admin_session))) {
+                
+                out.println("<div style=\"text-align: left; width: 100%\"><br />");
+                out.println("<label>Current status: " +
+                        Control_Search_Company_Users.control_search_company_user_status(admin_session) + "</label>");
+                out.println("</div>");
+                out.println("<div style=\"text-align: left; width: 100%\"><br />");
+                out.println("<label>Change status:</label>");
+                out.println("<select id=\"status\" style=\"width: 98%\">");
+                out.println("<option value=\"Choose\">Choose</option>");
+                out.println("<option value=\"Available - online\">Available - online</option>");
+                out.println("<option value=\"Available - offline\">Available - offline</option>");
+                out.println("<option value=\"Not available\">Not available</option>");
+                out.println("</select>");
+                out.println("</div>");
+                out.println("<div style=\"text-align: left; width: 100%\"><br />");
+                out.println("<input type=\"button\" id=\"change_status\" value=\"Change status\" onclick=\"change_user_status()\" /><br /><br />");
+                out.println("</div>");
+                out.println("<script type=\"text/javascript\">");
+                out.println("");
+                out.println("function change_user_status() {");
+                out.println("");
+                out.println("var xhttp = new XMLHttpRequest();");
+                out.println("");
+                out.println("xhttp.onreadystatechange = function() {");
+                out.println("");
+                out.println("if (this.readyState == 4 && this.status == 200) {");
+                out.println("");
+                out.println("$(\".change_status\").html(this.responseText);");
+                out.println("}");
+                out.println("};");
+                out.println("");
+                out.println("xhttp.open(\"POST\", \"" + Config.third_party_domain() + "/admin-change-user-status\");");
+                out.println("xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");");
+                out.println("");
+                out.println("xhttp.send(\"admin_session=" + 
+                        admin_session + "&status=\" + document.getElementById(\"status\").value + " +
+                        "\"&change_status=Change status\");");
+                out.println("}");
+                out.println("</script>");
+            }
+            
+            out.println("<div class=\"change_status\" style=\"text-align: left; width: 100%\"></div>");
+            out.println("<div id=\"send_message\" style=\"text-align: left; width: 100%\"></div>");
+            out.println("");
+            out.println("<script type=\"text/javascript\">");
+            out.println("var message = document.getElementById(\"message\");");
+            out.println("");
+            out.println("message.addEventListener(\"keyup\", function(event) {");
+            out.println("");
+            out.println("if (event.keyCode === 13) {");
+            out.println("");
+            out.println("event.preventDefault();");
+            out.println("send_message();");
+            out.println("}");
+            out.println("});");
+            out.println("</script>");
+        } else {
+            
+            out.println("<div style=\"text-align: left; width: 100%\">");
+            out.println("<div id=\"step_one\" style=\"text-align: left; width: 100%; display: none\">");
+            out.println("<div style=\"text-align: left; width: 100%\">");
+            out.println("<label>What is your name?</label>");
+            out.println("</div>");
+            out.println("<div style=\"text-align: left; width: 100%\">");
+            out.println("<input type=\"text\" id=\"full_name\" style=\"width: 98%\" />");
+            out.println("</div>");
+            out.println("<div style=\"text-align: left; width: 100%\">");
+            out.println("<br />");
+            out.println("<input type=\"checkbox\" id=\"no_name\" value=\"Anonymous\" onchange=\"exclude_full_name()\" />");
+            out.println("<label>I prefer not to answer.</label>");
+            out.println("</div>");
+            out.println("<div style=\"text-align: left; width: 100%\">");
+            out.println("<br />");
+            out.println("<input type=\"button\" id=\"provide_full_name\" value=\"Next\" onclick=\"provide_full_name()\" />");
+            out.println("</div>");
+            out.println("<div style=\"text-align: left; width: 100%\">");
+            out.println("<br />");
+            out.println("<div id=\"step_one_feedback\" style=\"text-align: left; width: 100%\"></div>");
+            out.println("</div>");
+            out.println("</div>");
+            out.println("<div id=\"step_two\" style=\"text-align: left; width: 100%; display: none\">");
+            out.println("<div style=\"text-align: left; width: 100%\">");
+            out.println("<br />");
+            out.println("<input type=\"button\" class=\"return_to_first_step\" value=\"Back\" onclick=\"return_to_first_step()\" />");
+            out.println("<br /><br />");
+            out.println("</div>");
+            out.println("<script type=\"text/javascript\">");
+            out.println("var socket = io.connect(\"https://chat-app-node-1.herokuapp.com\");");
+            out.println("");
+            out.println("socket.on('log_other_users_out', function(data) {");
+            out.println("");
+            out.println("var xhttp = new XMLHttpRequest();");
+            out.println("");
+            out.println("xhttp.onreadystatechange = function() {");
+            out.println("");
+            out.println("if (this.readyState == 4 && this.status == 200) {");
+            out.println("");
+            out.println("$(\"#available_users\").html(this.responseText);");
+            out.println("}");
+            out.println("};");
+            out.println("");
+            out.println("xhttp.open(\"POST\", \"" + Config.third_party_domain() + "/check-user-status\");");
+            out.println("xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");");
+            out.println("");
+            out.println("xhttp.send(\"check_status=Check status\");");
+            out.println("});");
+            out.println("</script>");
+            out.println("<div id=\"available_users\" style=\"text-align: left; width: 100%\">");
+            
+            Control_Search_Company_Users.use_connection = use_open_connection;
+            
+            out.println(Control_Search_Company_Users.control_search_company_users());
+            
+            out.println("</div>");
+            out.println("<div style=\"text-align: left; width: 100%\">");
+            out.println("<br />");
+            out.println("<input type=\"button\" class=\"return_to_first_step\" value=\"Back\" onclick=\"return_to_first_step()\" />");
+            out.println("</div>");
+            out.println("<div style=\"text-align: left; width: 100%\">");
+            out.println("<br />");
+            out.println("<div id=\"step_two_feedback\" style=\"text-align: left; width: 100%\"></div>");
+            out.println("</div>");            
+            out.println("</div>");
+            out.println("</div>");
+            out.println("");
+            out.println("<script type=\"text/javascript\">");
+            out.println("var choose_person = \"\";");
+            out.println("");
+            out.println("$(document).ready(function() {");
+            out.println("");
+            out.println("$(\"#step_one\").fadeIn();");
+            out.println("document.getElementById(\"full_name\").value = \"\";");
+            out.println("});");
+            out.println("");
+            out.println("function exclude_full_name() {");
+            out.println("");
+            out.println("if (document.getElementById(\"no_name\").checked) {");
+            out.println("");
+            out.println("document.getElementById(\"full_name\").disabled = true;");
+            out.println("document.getElementById(\"full_name\").value = \"Anonymous\";");
+            out.println("} else {");
+            out.println("");
+            out.println("document.getElementById(\"full_name\").disabled = false;");
+            out.println("document.getElementById(\"full_name\").value = \"\";");
+            out.println("}");
+            out.println("}");
+            out.println("");
+            out.println("function provide_full_name() {");
+            out.println("");
+            out.println("if (document.getElementById(\"full_name\").value == \"\" || document.getElementById(\"full_name\").value.replace(/\\s/g, \"\").length == 0) {");
+            out.println("");
+            out.println("$(\"#step_one_feedback\").html(\"<label><span style=\\\"color: red\\\">Please provide your name.</span></label>\");");
+            out.println("} else {");
+            out.println("");
+            out.println("$(\"#step_one\").fadeOut();");
+            out.println("$(\"#step_two\").fadeIn();");
+            out.println("}");
+            out.println("}");
+            out.println("");
+            out.println("function select_person(user_id) {");
+            out.println("");
+            out.println("choose_person = user_id;");
+            out.println("log_in();");
+            out.println("}");
+            out.println("");
+            out.println("function return_to_first_step() {");
+            out.println("");
+            out.println("$(\"#step_two\").fadeOut();");
+            out.println("$(\"#step_one\").fadeIn();");
+            out.println("}");
+            out.println("");
+            out.println("function log_in() {");
+            out.println("");
+            out.println("var guest_session = \"\";");
+            out.println("var characters = \"ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789\";");
+            out.println("");
+            out.println("for (var i = 0; i < 20; i++) {");
+            out.println("");
+            out.println("guest_session += characters.charAt(Math.floor(Math.random() * characters.length));");
+            out.println("}");
+            out.println("");
+            out.println("var xhttp = new XMLHttpRequest();");
+            out.println("");
+            out.println("xhttp.onreadystatechange = function() {");
+            out.println("");
+            out.println("if (this.readyState == 4 && this.status == 200) {");
+            out.println("");
+            out.println("$(\"#step_two_feedback\").html(this.responseText);");
+            out.println("}");
+            out.println("};");
+            out.println("");
+            out.println("xhttp.open(\"POST\", \"" + Config.third_party_domain() + "/log-in\");");
+            out.println("xhttp.setRequestHeader(\"Content-type\", \"application/x-www-form-urlencoded\");");
+            out.println("");
+            out.println("xhttp.send(\"full_name=\" + document.getElementById(\"full_name\").value + \"&guest_session=\" + guest_session + \"&select_person=\" + choose_person + \"&log_in=Log in\");");
+            out.println("}");
+            out.println("");
+            out.println("socket.on('refresh_admin_window', function(data) {");
+            out.println("");
+            out.println("if (data != \"\") {");
+            out.println("");
+            out.println("window.location = document.location.href.replace(\"#\", \"\");");
+            out.println("}");
+            out.println("});");
+            out.println("</script>");
+        }
+		
+        out.println("</body>");
+        out.println("</html>");
     }
     
     /**
