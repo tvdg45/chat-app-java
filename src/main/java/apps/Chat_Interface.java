@@ -794,7 +794,7 @@ public class Chat_Interface extends HttpServlet {
         
         processRequest(request, response);
         
-        response.setContentType("text/html");
+        //response.setContentType("text/html");
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
