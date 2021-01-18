@@ -794,7 +794,7 @@ public class Chat_Interface extends HttpServlet {
         
         processRequest(request, response);
         
-        //response.setContentType("text/html");
+        response.setContentType("text/html");
         response.addHeader("Access-Control-Allow-Origin", "*");
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
@@ -812,9 +812,6 @@ public class Chat_Interface extends HttpServlet {
         String conversation_owner = "";
         String user_status;
 		
-		//String tester = request.getParameter("UserName") + " " + request.getParameter("Password");
-        
-		//out.println(tester);
         out.println("<!DOCTYPE html>");
         out.println("<html xmlns=\"https://www.w3.org/1999/xhtml\" lang=\"en\">");
         out.println("<head>");
