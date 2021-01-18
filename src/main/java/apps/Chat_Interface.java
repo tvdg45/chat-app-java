@@ -89,7 +89,7 @@ public class Chat_Interface extends HttpServlet {
         return "Short description";
     } // </editor-fold>
 	
-	private void chat_interface(HttpServletRequest request, HttpServletResponse response) {
+	private void chat_interface(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		
 		PrintWriter out = response.getWriter();
 		
