@@ -50,9 +50,7 @@ public class Chat_Interface extends HttpServlet {
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
         
-        PrintWriter out = response.getWriter();
-        
-		chat_interface(out);
+		chat_interface(request, response);
     }
     
     /**
@@ -75,10 +73,8 @@ public class Chat_Interface extends HttpServlet {
         response.setHeader("Access-Control-Allow-Credentials", "true");
         response.setHeader("Access-Control-Allow-Methods", "POST, GET, OPTIONS, DELETE");
         response.setHeader("Access-Control-Allow-Headers", "Origin, Accept, X-Requested-With, Content-Type, Access-Control-Request-Method, Access-Control-Request-Headers");
-        
-        PrintWriter out = response.getWriter();
 		
-		chat_interface(out);
+		chat_interface(request, response);
     }
     
     /**
@@ -93,7 +89,9 @@ public class Chat_Interface extends HttpServlet {
         return "Short description";
     } // </editor-fold>
 	
-	private void chat_interface(PrintWriter out) {
+	private void chat_interface(HttpServletRequest request, HttpServletResponse response) {
+		
+		PrintWriter out = response.getWriter();
 		
         Connection use_open_connection;
   
