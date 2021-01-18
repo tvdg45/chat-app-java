@@ -812,9 +812,9 @@ public class Chat_Interface extends HttpServlet {
         String conversation_owner = "";
         String user_status;
 		
-		String tester = request.getParameter("UserName") + " " + request.getParameter("Password");
+		//String tester = request.getParameter("UserName") + " " + request.getParameter("Password");
         
-		out.println(tester);
+		//out.println(tester);
         out.println("<!DOCTYPE html>");
         out.println("<html xmlns=\"https://www.w3.org/1999/xhtml\" lang=\"en\">");
         out.println("<head>");
